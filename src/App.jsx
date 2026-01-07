@@ -201,103 +201,109 @@ export default function RevisionUltimate() {
   // 1. MENU
   if (appState === 'menu') {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans">
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-lg w-full text-center border border-slate-200">
-          <div className="flex justify-center mb-6">
-             <div className="bg-blue-600 p-4 rounded-2xl shadow-lg rotate-3">
-               <Layers className="w-10 h-10 text-white" />
-             </div>
-          </div>
-          <h1 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">DLST <span className="text-blue-600">Ultimate</span></h1>
-          <p className="text-slate-500 mb-8 font-medium">Préparation complète à l'examen Deep Learning Time Series.</p>
+      <>
+        <Analytics />
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans">
+          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-lg w-full text-center border border-slate-200">
+            <div className="flex justify-center mb-6">
+               <div className="bg-blue-600 p-4 rounded-2xl shadow-lg rotate-3">
+                 <Layers className="w-10 h-10 text-white" />
+               </div>
+            </div>
+            <h1 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">DLST <span className="text-blue-600">Ultimate</span></h1>
+            <p className="text-slate-500 mb-8 font-medium">Préparation complète à l'examen Deep Learning Time Series.</p>
 
-          <div className="grid gap-3 mb-8">
-            <MenuButton 
-              icon={<List className="w-5 h-5 text-indigo-500" />} 
-              title="Mode Séquentiel" 
-              subtitle="50 questions dans l'ordre du cours"
-              onClick={() => startQuiz('sequential')} 
-            />
-            <MenuButton 
-              icon={<Shuffle className="w-5 h-5 text-purple-500" />} 
-              title="Mode Aléatoire" 
-              subtitle="Mélange complet pour tester vos réflexes"
-              onClick={() => startQuiz('random')} 
-            />
-            <MenuButton 
-              icon={<AlertTriangle className="w-5 h-5 text-red-500" />} 
-              title="Mode Hardcore" 
-              subtitle="Seulement les 20 questions difficiles"
-              onClick={() => startQuiz('hard')} 
-            />
-          </div>
+            <div className="grid gap-3 mb-8">
+              <MenuButton 
+                icon={<List className="w-5 h-5 text-indigo-500" />} 
+                title="Mode Séquentiel" 
+                subtitle="50 questions dans l'ordre du cours"
+                onClick={() => startQuiz('sequential')} 
+              />
+              <MenuButton 
+                icon={<Shuffle className="w-5 h-5 text-purple-500" />} 
+                title="Mode Aléatoire" 
+                subtitle="Mélange complet pour tester vos réflexes"
+                onClick={() => startQuiz('random')} 
+              />
+              <MenuButton 
+                icon={<AlertTriangle className="w-5 h-5 text-red-500" />} 
+                title="Mode Hardcore" 
+                subtitle="Seulement les 20 questions difficiles"
+                onClick={() => startQuiz('hard')} 
+              />
+            </div>
 
-          <div className="mb-8">
-             <p className="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wide">Nombre de questions</p>
-             <div className="flex gap-2 justify-center">
-               {['10', '20', '30', '40', 'all'].map(count => (
-                 <button
-                   key={count}
-                   onClick={() => setQuestionCount(count)}
-                   className={`px-4 py-2 rounded-lg font-bold transition-all ${questionCount === count 
-                     ? 'bg-blue-600 text-white shadow-lg scale-105' 
-                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
-                 >
-                   {count === 'all' ? 'Tout' : count}
-                 </button>
-               ))}
-             </div>
-          </div>
+            <div className="mb-8">
+               <p className="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wide">Nombre de questions</p>
+               <div className="flex gap-2 justify-center">
+                 {['10', '20', '30', '40', 'all'].map(count => (
+                   <button
+                     key={count}
+                     onClick={() => setQuestionCount(count)}
+                     className={`px-4 py-2 rounded-lg font-bold transition-all ${questionCount === count 
+                       ? 'bg-blue-600 text-white shadow-lg scale-105' 
+                       : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                   >
+                     {count === 'all' ? 'Tout' : count}
+                   </button>
+                 ))}
+               </div>
+            </div>
 
-          <button 
-            onClick={() => setAppState('cheatsheet')}
-            className="w-full py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-bold hover:bg-slate-50 flex items-center justify-center gap-2 transition-colors"
-          >
-            <FileText className="w-5 h-5" /> Accéder aux Fiches de Révision
-          </button>
+            <button 
+              onClick={() => setAppState('cheatsheet')}
+              className="w-full py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-bold hover:bg-slate-50 flex items-center justify-center gap-2 transition-colors"
+            >
+              <FileText className="w-5 h-5" /> Accéder aux Fiches de Révision
+            </button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   // 2. CHEAT SHEET
   if (appState === 'cheatsheet') {
     return (
-      <div className="min-h-screen bg-slate-100 p-4 md:p-8 font-sans">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-4 mb-8">
-            <button onClick={() => setAppState('menu')} className="p-2 bg-white rounded-full shadow hover:bg-slate-50 transition-all">
-              <RotateCcw className="w-6 h-6 text-slate-600" />
-            </button>
-            <h1 className="text-2xl font-bold text-slate-800">Fiches de Révision Express</h1>
-          </div>
+      <>
+        <Analytics />
+        <div className="min-h-screen bg-slate-100 p-4 md:p-8 font-sans">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center gap-4 mb-8">
+              <button onClick={() => setAppState('menu')} className="p-2 bg-white rounded-full shadow hover:bg-slate-50 transition-all">
+                <RotateCcw className="w-6 h-6 text-slate-600" />
+              </button>
+              <h1 className="text-2xl font-bold text-slate-800">Fiches de Révision Express</h1>
+            </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-             {Object.entries(slideSummaries).map(([key, data]) => (
-               <div key={key} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                 <div className="bg-slate-800 p-4 border-b border-slate-700">
-                   <h2 className="text-white font-bold text-lg">{data.title}</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+               {Object.entries(slideSummaries).map(([key, data]) => (
+                 <div key={key} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                   <div className="bg-slate-800 p-4 border-b border-slate-700">
+                     <h2 className="text-white font-bold text-lg">{data.title}</h2>
+                   </div>
+                   <div className="p-5 flex-1 bg-gradient-to-b from-white to-slate-50">
+                     <ul className="space-y-4">
+                       {data.points.map((pt, idx) => (
+                         <li key={idx} className="text-sm text-slate-700">
+                           <div className="flex items-center gap-2 mb-1">
+                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                             <strong className="block text-blue-700">{pt.t}</strong>
+                           </div>
+                           <div className="pl-3.5 text-slate-600 leading-relaxed">
+                              <LatexText text={pt.c} />
+                           </div>
+                         </li>
+                       ))}
+                     </ul>
+                   </div>
                  </div>
-                 <div className="p-5 flex-1 bg-gradient-to-b from-white to-slate-50">
-                   <ul className="space-y-4">
-                     {data.points.map((pt, idx) => (
-                       <li key={idx} className="text-sm text-slate-700">
-                         <div className="flex items-center gap-2 mb-1">
-                           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                           <strong className="block text-blue-700">{pt.t}</strong>
-                         </div>
-                         <div className="pl-3.5 text-slate-600 leading-relaxed">
-                            <LatexText text={pt.c} />
-                         </div>
-                       </li>
-                     ))}
-                   </ul>
-                 </div>
-               </div>
-             ))}
+               ))}
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -305,6 +311,8 @@ export default function RevisionUltimate() {
   if (appState === 'results') {
     const percentage = Math.round((score / quizQuestions.length) * 100);
     return (
+      <>
+        <Analytics />
       <div className="min-h-screen bg-slate-50 p-6 flex items-center justify-center font-sans">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-2xl w-full border border-slate-200">
           <div className="text-center mb-8">
@@ -345,6 +353,7 @@ export default function RevisionUltimate() {
           </button>
         </div>
       </div>
+    </>
     );
   }
 
@@ -353,7 +362,9 @@ export default function RevisionUltimate() {
      const cardIndex = (Math.floor(currentQIndex / 5)) % flashcards.length;
      const card = flashcards[cardIndex];
      return (
-       <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans animate-in fade-in duration-300">
+       <>
+         <Analytics />
+         <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 font-sans animate-in fade-in duration-300">
          <div className="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-3xl p-8 max-w-lg w-full shadow-2xl relative overflow-hidden border border-slate-700">
             {/* Decorative */}
             <div className="absolute top-[-50px] right-[-50px] w-40 h-40 bg-blue-500 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
@@ -381,6 +392,7 @@ export default function RevisionUltimate() {
             </div>
          </div>
        </div>
+       </>
      );
    }
 
