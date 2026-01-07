@@ -5,7 +5,7 @@ import {
   Layers, Eye, MessageSquare, ChevronDown, ChevronUp, FileText, 
   Thermometer, Anchor, Network
 } from 'lucide-react';
-import { database, flashcards, slideSummaries } from './data';
+import { Analytics } from '@vercel/analytics/react';
 
 // --- GESTION DU LATEX (KATEX) ---
 const useKatex = () => {
@@ -539,6 +539,7 @@ export default function RevisionUltimate() {
           )}
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
