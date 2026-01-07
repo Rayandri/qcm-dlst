@@ -761,7 +761,20 @@ export default function RevisionUltimate() {
   // START QUIZ
   const startQuiz = (selectedMode) => {
     setMode(selectedMode);
-    let q = [...database];
+    // 1. Deep Clone + Shuffle Options
+    let q = database.map(item => {
+      if (item.type !== 'mcq') return { ...item };
+      
+      // Shuffle options but track correct answer
+      const optionsWithIndex = item.options.map((opt, idx) => ({ opt, idx }));
+      const shuffled = shuffleArray(optionsWithIndex);
+      
+      return {
+        ...item,
+        options: shuffled.map(o => o.opt),
+        correct: shuffled.findIndex(o => o.idx === item.correct)
+      };
+    });
     
     if (selectedMode === 'hard') {
       q = q.filter(item => item.diff === 'hard');
