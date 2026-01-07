@@ -56,33 +56,69 @@ const flashcards = [
   },
   {
     id: 2,
-    title: "Receptive Field (TCN)",
-    content: "Contrairement aux RNN, la mémoire d'un TCN est finie. Elle dépend de la taille du noyau $k$, du nombre de couches $L$ et des facteurs de dilatation $d_i$.\nFormule du champ réceptif :\n$R = 1 + \\sum_{i=0}^{L-1} (k-1) \\cdot d_i$\nSi dilatation exponentielle ($d=2^i$) : $R \\approx 2^L$.",
-    icon: "metric"
+    title: "Stationnarité (Weak Sense)",
+    content: "Une série est faiblement stationnaire si :\n• Moyenne constante : $\\mathbb{E}[X_t] = \\mu$\n• Variance constante dans le temps\n• Autocovariance dépend uniquement du lag $h$, pas de $t$\nCondition souvent requise pour les modèles stats (ARIMA).",
+    icon: "chart"
   },
   {
     id: 3,
-    title: "Attention Mechanism (Maths)",
-    content: "Le cœur du Transformer. On calcule une similarité entre Query ($Q$) et Key ($K$).\n$Attention(Q, K, V) = softmax(\\frac{QK^T}{\\sqrt{d_k}})V$\nLe facteur $\\frac{1}{\\sqrt{d_k}}$ sert à éviter que le produit scalaire n'explose (ce qui tuerait les gradients du Softmax).",
-    icon: "eye"
+    title: "Bruit Blanc (White Noise)",
+    content: "Le hasard pur. Imprévisible.\n• Moyenne nulle : $\\mathbb{E}[w_t] = 0$\n• Variance constante : $\\sigma^2$\n• Aucune corrélation : $Cov(w_t, w_s) = 0$ si $t \\neq s$\nSi les résidus de ton modèle sont un bruit blanc, tu as tout extrait !",
+    icon: "metric"
   },
   {
     id: 4,
-    title: "Vanishing Gradient (RNN)",
-    content: "En BPTT (Backprop Through Time), le gradient est multiplié par la matrice de poids récurrente $W_h$ à chaque pas.\nSi la plus grande valeur propre $|\\lambda| < 1$, le gradient tend vers 0 exponentiellement ($0.9^{100} \\approx 0$).\nSolution : LSTM/GRU (additif via gates) ou initialisation orthogonale.",
+    title: "LSTM Gates",
+    content: "3 portes contrôlent le flux d'information :\n• **Forget Gate** : Ce qu'on jette de la mémoire\n• **Input Gate** : Ce qu'on écrit dans la mémoire\n• **Output Gate** : Ce qu'on lit de la mémoire\nFormule Cell State : $C_t = f_t \\odot C_{t-1} + i_t \\odot \\tilde{C}_t$",
     icon: "network"
   },
   {
     id: 5,
-    title: "SSL : InfoNCE Loss",
-    content: "Utilisée en Contrastive Learning.\n$L = -\\log \\frac{\\exp(sim(z_i, z_j)/\\tau)}{\\sum_{k} \\exp(sim(z_i, z_k)/\\tau)}$\nOn veut maximiser la probabilité de la paire positive $(i,j)$ par rapport à toutes les paires négatives $k$ du batch. $\\tau$ est la température.",
-    icon: "mask"
+    title: "Attention Mechanism",
+    content: "Le cœur du Transformer. 'Quelle partie de l'entrée est importante pour ce que je génère maintenant ?'\n$Attention(Q, K, V) = softmax(\\frac{QK^T}{\\sqrt{d_k}})V$\nQ=Query, K=Key, V=Value. Division par $\\sqrt{d_k}$ pour éviter saturation du softmax.",
+    icon: "eye"
   },
   {
     id: 6,
-    title: "Dimensional Collapse",
-    content: "Problème en SSL où le modèle 'triche' en projetant toutes les données dans un sous-espace très réduit (ou un point constant). \nConséquence : Bonne loss mais représentations inutiles.\nSolutions : Contrastive negative pairs, Asymmetric networks (SimSiam/BYOL), Variance-Invariance-Covariance regularization.",
+    title: "Positional Encoding",
+    content: "Le Transformer n'a pas de récurrence → pas de notion d'ordre.\nOn ajoute des vecteurs de position (sin/cos) aux embeddings.\nSans PE : 'Manger pour vivre' = 'Vivre pour manger'\nFormule : $PE_{pos,2i} = sin(pos/10000^{2i/d})$",
+    icon: "triangle"
+  },
+  {
+    id: 7,
+    title: "Vanishing Gradient (RNN)",
+    content: "En BPTT, le gradient est multiplié par $W_h$ à chaque pas de temps.\nSi $|\\lambda_{max}| < 1$, le gradient → 0 exponentiellement.\n$0.9^{100} \\approx 0$ : oubli du passé lointain !\nSolutions : LSTM/GRU, Skip connections, initialisation orthogonale.",
+    icon: "network"
+  },
+  {
+    id: 8,
+    title: "Contrastive Loss",
+    content: "Principe du Contrastive Learning :\n$\\downarrow$ distance(ancrage, positif)\n$\\uparrow$ distance(ancrage, négatif)\nPaire positive = augmentations du même exemple\nPaire négative = exemples différents du batch",
+    icon: "mask"
+  },
+  {
+    id: 9,
+    title: "SSL : InfoNCE Loss",
+    content: "Loss standard du Contrastive Learning.\n$L = -\\log \\frac{\\exp(sim(z_i, z_j)/\\tau)}{\\sum_{k} \\exp(sim(z_i, z_k)/\\tau)}$\nC'est une cross-entropy catégorielle où la classe correcte est la paire positive. $\\tau$ = température.",
+    icon: "mask"
+  },
+  {
+    id: 10,
+    title: "Linear Probing",
+    content: "Évaluation de la qualité des features SSL :\n1. Geler le backbone pré-entraîné\n2. Entraîner seulement un classifieur linéaire dessus\nSi ça marche bien → le modèle a 'compris' les données.\nAlternative : Fine-tuning (ré-entraîner tout).",
     icon: "chart"
+  },
+  {
+    id: 11,
+    title: "Dimensional Collapse",
+    content: "Problème en SSL : le modèle 'triche' en sortant toujours le même vecteur.\nConséquence : loss faible mais représentations inutiles.\nSolutions :\n• Paires négatives (SimCLR)\n• Asymmetric networks (BYOL/SimSiam)\n• Régularisation VICReg",
+    icon: "chart"
+  },
+  {
+    id: 12,
+    title: "Channel Independence (PatchTST)",
+    content: "Innovation de PatchTST (SOTA 2023) :\nTraiter chaque variable d'une série multivariée comme une série univariée distincte.\n→ Partage des poids, moins de paramètres\n→ Meilleure généralisation que le 'Channel-Mixing'",
+    icon: "triangle"
   }
 ];
 
@@ -93,26 +129,26 @@ const slideSummaries = {
     points: [
       { t: "Définition", c: "Série Temporelle : Suite d'observations indexées par le temps $X = \\{X_{t_1}, ..., X_{t_n}\\}$. Processus Stochastique : La loi de probabilité génératrice." },
       { t: "Stationnarité", c: "Faible : Espérance constante, Variance constante, Autocovariance ne dépend que du délai $h$ (pas du temps $t$)." },
-      { t: "Tâches", c: "Forecasting (Prédire $X_{t+h}$), Classification (Labeliser la série), Event Detection (Trouver $t$ anormal), Imputation (Remplir les trous)." },
-      { t: "Métriques", c: "MSE (Sensible outliers), MAE (Robuste), MAPE (Pourcentage, attention si $y=0$)." }
+      { t: "Modèles Stats", c: "Random Walk (Non stationnaire), AR(p) (Linéaire), Prophet (Additif : Tendance + Saison + Vacances), Kalman (État caché + Mesure)." },
+      { t: "Métriques", c: "MSE (Sensible outliers), MAE (Robuste), MAPE (Pourcentage, attention si $y=0$). ACF/PACF pour l'analyse de dépendance." }
     ]
   },
   session2: {
     title: "Session 2 : Architectures DNN",
     points: [
-      { t: "RNN & Problèmes", c: "Traitement séquentiel. Problème : Vanishing Gradient sur longues séquences (BPTT). Solution : LSTM/GRU (Gating)." },
-      { t: "CNN (TCN)", c: "Convolutions 1D. Causales (pas de futur) + Dilatées (grand champ réceptif). Parallélisables $\\to$ Rapides." },
-      { t: "Transformers", c: "Mécanisme d'Attention $O(L^2)$. Invariant par permutation $\\to$ Besoin de Positional Encoding. SOTA actuel mais lourd." },
-      { t: "ResNets", c: "Skip connections $y = f(x) + x$ pour éviter la dégradation du gradient dans les réseaux profonds." }
+      { t: "RNN vs LSTM/GRU", c: "RNN : Vanishing Gradient. LSTM : 3 gates (Input, Forget, Output). GRU : 2 gates (Reset, Update), pas de Cell State séparé." },
+      { t: "CNN 1D (TCN)", c: "Convolutions causales (pas de futur) & dilatées (grand champ réceptif sans perte de résolution). Parallélisables." },
+      { t: "Transformers", c: "Attention $O(L^2)$. Invariant par permutation $\\to$ Positional Encoding nécessaire. PatchTST : Channel Independence (SOTA)." },
+      { t: "Régularisation", c: "Skip Connections (ResNet) pour la profondeur. Dropout. Layer Norm (préférée au Batch Norm pour les séquences)." }
     ]
   },
   session3: {
     title: "Session 3 : Self-Supervised Learning",
     points: [
-      { t: "Le Gâteau de LeCun", c: "Reinforcement (Cerise), Supervised (Glaçage), Unsupervised (Le Gâteau lui-même). Le SSL est crucial car les labels sont rares." },
-      { t: "Contrastive Learning", c: "Rapprocher $(x, x^+)$ (Positifs) et éloigner $(x, x^-)$ (Négatifs). Loss : InfoNCE. Augmentations cruciales (Crop, Noise)." },
-      { t: "Evaluation SSL", c: "Linear Probing (Entraîner juste un classifieur linéaire sur les embeddings gelés) ou Zero-Shot k-NN." },
-      { t: "Dimensional Collapse", c: "Quand les embeddings sont redondants. Mesuré par le rang de la matrice de covariance." }
+      { t: "Le Concept", c: "Apprendre sans labels via une 'Tâche Prétexte' (Masking, Contrastive). Le 'Gâteau' de LeCun : SSL = la masse du gâteau." },
+      { t: "Contrastive Learning", c: "Rapprocher $(x, x^+)$ (Positifs) et éloigner $(x, x^-)$ (Négatifs). Loss : InfoNCE. Augmentations : Jitter, Scale, Warping." },
+      { t: "Problèmes SSL", c: "Dimensional Collapse (Triche par vecteur constant). Solutions : Paires négatives (SimCLR) ou Asymétrie (BYOL)." },
+      { t: "Evaluation", c: "Linear Probing (Backbone gelé + Classifieur linéaire) pour tester la qualité des embeddings. Fine-tuning pour la tâche finale." }
     ]
   }
 };
@@ -465,6 +501,110 @@ const database = [
     options: ["AR(p)", "MA(q)", "ARMA", "RNN"],
     correct: 0,
     expl: "Pour un AR(p), la PACF se coupe (devient nulle) après le lag $p$."
+  },
+
+  // --- NEW ADDITIONS : SESSION 1 EXTENDED ---
+  {
+    id: 51, type: 'mcq', diff: 'medium',
+    q: "Une série temporelle est dite 'faiblement stationnaire' si :",
+    options: ["Moyenne cste, Variance cste, Covariance dépend de t", "Moyenne linéaire, Variance cste", "Moyenne cste, Covariance dépend uniquement du lag h", "Distribution Gaussienne parfaite"],
+    correct: 2,
+    expl: "La covariance $\\gamma(t, t+h)$ ne doit dépendre que de $h$ (la distance temporelle), pas de la position absolue $t$."
+  },
+  {
+    id: 52, type: 'mcq', diff: 'hard',
+    q: "Dans une marche aléatoire (Random Walk) $X_{t+1} = X_t + w_t$ :",
+    options: ["La variance est constante", "La série est stationnaire", "La variance augmente linéairement avec t", "La prédiction long terme est 0"],
+    correct: 2,
+    expl: "$Var(X_t) = t \\cdot \\sigma^2$. La variance explose avec le temps, donc non stationnaire."
+  },
+  {
+    id: 53, type: 'mcq', diff: 'hard',
+    q: "Différence principale entre Autocorrélation et Autocovariance ?",
+    options: ["L'autocorrélation est normalisée (entre -1 et 1)", "L'autocovariance mesure la causalité", "L'autocorrélation est pour les bruits blancs", "Aucune"],
+    correct: 0,
+    expl: "L'autocorrélation est l'autocovariance divisée par la variance (normalisation)."
+  },
+  {
+    id: 54, type: 'mcq', diff: 'medium',
+    q: "Le modèle Prophet de Facebook est basé sur une décomposition :",
+    options: ["Multiplicative de réseaux de neurones", "Additive : Tendance + Saisonnalité + Fêtes", "Purement AR", "Équations différentielles"],
+    correct: 1,
+    expl: "Prophet modélise : $\\hat{y}(t) = g(t) + s(t) + h(t)$ (Tendance + Saisonnalité + Jours fériés)."
+  },
+  {
+    id: 55, type: 'mcq', diff: 'medium',
+    q: "Si l'autocorrélation chute brusquement à 0 après le lag $q$, cela suggère un processus :",
+    options: ["AR(p)", "MA(q)", "Random Walk", "Non stationnaire"],
+    correct: 1,
+    expl: "Signature théorique d'un processus MA(q). Pour un AR(p), ça décroît exponentiellement."
+  },
+  {
+    id: 56, type: 'mcq', diff: 'easy',
+    q: "À quoi sert la différenciation (differencing) $X_t - X_{t-1}$ ?",
+    options: ["Lisser la courbe", "Rendre stationnaire en supprimant la tendance", "Augmenter le dataset", "Calculer l'intégrale"],
+    correct: 1,
+    expl: "Supprime la tendance linéaire et stabilise la moyenne."
+  },
+  {
+    id: 57, type: 'mcq', diff: 'hard',
+    q: "Quel modèle incorpore explicitement des lois physiques (état caché) ?",
+    options: ["ARIMA", "LSTM", "Filtre de Kalman", "SVM"],
+    correct: 2,
+    expl: "Estime l'état caché d'un système à partir de mesures bruitées (très utilisé GPS)."
+  },
+  {
+    id: 58, type: 'mcq', diff: 'hard',
+    q: "Quelle métrique permet de comparer des erreurs sur des séries d'échelles très différentes ?",
+    options: ["MSE", "MAE", "MAPE (Mean Absolute Percentage Error)", "RMSE"],
+    correct: 2,
+    expl: "MAPE est un pourcentage d'erreur relative, indépendant de l'unité (ex: € vs M€)."
+  },
+  
+  // --- NEW ADDITIONS : SESSION 2 EXTENDED ---
+  {
+    id: 59, type: 'mcq', diff: 'medium',
+    q: "Différence structurelle majeure entre LSTM et GRU ?",
+    options: ["GRU a plus de paramètres", "GRU n'a pas de Cell State séparé", "LSTM ne gère pas les longues séquences", "GRU utilise ReLU"],
+    correct: 1,
+    expl: "GRU fusionne Cell State et Hidden State, et a 2 portes au lieu de 3."
+  },
+  {
+    id: 60, type: 'mcq', diff: 'hard',
+    q: "Qu'est-ce que 'Channel Independence' dans PatchTST ?",
+    options: ["Modèle ignore les corrélations", "Chaque variable traitée par le même Backbone, poids partagés", "Modèle différent par canal", "Suppression du bruit"],
+    correct: 1,
+    expl: "Apprend une structure temporelle globale robuste et réduit le nombre de paramètres."
+  },
+  {
+    id: 61, type: 'mcq', diff: 'hard',
+    q: "Dans l'Attention, que sont Q, K, V ?",
+    options: ["Quantities, Kernels, Vectors", "Questions, Keys, Values", "Queries, Keys, Values", "Quality, Knowns, Variables"],
+    correct: 2,
+    expl: "Analogie base de données : Requête (Query) comparée aux Clés (Keys) pour pondérer les Valeurs (Values)."
+  },
+  
+  // --- NEW ADDITIONS : SESSION 3 EXTENDED ---
+  {
+    id: 62, type: 'mcq', diff: 'medium',
+    q: "Idée centrale du Self-Supervised Learning (SSL) ?",
+    options: ["Apprendre sans aucune donnée", "Utiliser les données pour générer des 'pseudo-labels'", "Superviseur humain temps réel", "Synonyme de RL"],
+    correct: 1,
+    expl: "On masque une partie de l'input et le modèle doit la deviner (Pretext Task)."
+  },
+  {
+    id: 63, type: 'mcq', diff: 'hard',
+    q: "MoCo (Momentum Contrast) utilise un 'Momentum Encoder' pour :",
+    options: ["Accélérer le gradient", "Maintenir une représentation cohérente des clés (paires négatives)", "Ajouter du moment cinétique", "Encoder le futur"],
+    correct: 1,
+    expl: "Si l'encodeur de clés change trop vite, la loss est instable. Une moyenne glissante stabilise les cibles."
+  },
+  {
+    id: 64, type: 'mcq', diff: 'medium',
+    q: "Pourquoi le 'Reverse Time' augmentation est risqué pour un ECG ?",
+    options: ["C'est impossible à coder", "L'ECG a une causalité et forme précise (P-QRS-T)", "Ça ne change rien", "Le modèle va planter"],
+    correct: 1,
+    expl: "Inverser le temps pourrait créer une pathologie impossible, faussant l'apprentissage (contrairement à une image)."
   }
 ];
 
