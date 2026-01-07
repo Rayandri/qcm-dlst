@@ -532,7 +532,7 @@ export const database = [
     expl: "GRU fusionne Cell State et Hidden State, et a 2 portes au lieu de 3."
   },
   {
-    id: 60, type: 'mcq', diff: 'hard',
+    id: 60, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Qu'est-ce que 'Channel Independence' dans PatchTST ?",
     options: ["Modèle ignore les corrélations", "Chaque variable traitée par le même Backbone, poids partagés", "Modèle différent par canal", "Suppression du bruit"],
     correct: 1,
@@ -571,105 +571,105 @@ export const database = [
 
   // --- NEW ADDITIONS : SESSION 4 (AVANCÉ / SOTA) ---
   {
-    id: 65, type: 'mcq', diff: 'hard',
+    id: 65, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Dans une stratégie de prévision 'Recursive' (Iterative), le risque principal est :",
     options: ["Explosion du nombre de modèles", "Accumulation d'erreurs (Error Propagation)", "Sur-apprentissage immédiat", "Impossible à implémenter"],
     correct: 1,
     expl: "Si la première prédiction est fausse, on la réinjecte pour prédire la suite, amplifiant l'erreur."
   },
   {
-    id: 66, type: 'mcq', diff: 'hard',
+    id: 66, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Quel est l'avantage de la stratégie 'Direct' pour l'horizon $H$ ?",
     options: ["Un seul modèle pour tout l'horizon", "Pas d'accumulation d'erreurs car on entraîne un modèle par pas de temps", "Moins coûteux en calcul", "Meilleure sur les séries courtes"],
     correct: 1,
     expl: "On entraîne $H$ modèles distincts : $f_1$ pour $t+1$, $f_2$ pour $t+2$... Indépendance des erreurs."
   },
   {
-    id: 67, type: 'mcq', diff: 'expert',
+    id: 67, type: 'mcq', diff: 'expert', isBonus: true,
     q: "Le score CRPS (Continuous Ranked Probability Score) sert à évaluer :",
     options: ["Une prédiction ponctuelle (Point forecast)", "Une distribution de probabilité complète", "La précision de classification", "La vitesse d'inférence"],
     correct: 1,
     expl: "Il généralise le MAE pour des prédictions probabilistes. Il mesure la distance entre la CDF prédite et la CDF réelle (Step function)."
   },
   {
-    id: 68, type: 'mcq', diff: 'expert',
+    id: 68, type: 'mcq', diff: 'expert', isBonus: true,
     q: "Pourquoi 'RevIN' (Reversible Instance Normalization) est-il crucial pour les Transformers ?",
     options: ["Il accélère le GPU", "Il gère le 'Distribution Shift' en normalisant l'entrée et dé-normalisant la sortie", "Il remplace l'Attention", "Il supprime le bruit"],
     correct: 1,
     expl: "Les séries temporelles changent de statistiques (moyenne/variance) avec le temps. RevIN supprime ce shift temporairement pour que le modèle se concentre sur la forme."
   },
   {
-    id: 69, type: 'mcq', diff: 'hard',
+    id: 69, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Dans PatchTST, quel est l'intérêt principal du 'Patching' ?",
     options: ["Transformer l'image en son", "Réduire la longueur de séquence effective et capturer la sémantique locale", "Augmenter la résolution temporelle", "Supprimer les données manquantes"],
     correct: 1,
     expl: "Regrouper les points (ex: 16 points = 1 token) réduit la complexité quadratique de l'Attention et donne du contexte local."
   },
   {
-    id: 70, type: 'mcq', diff: 'expert',
+    id: 70, type: 'mcq', diff: 'expert', isBonus: true,
     q: "L'architecture 'TimesNet' transforme la série 1D en 2D pour :",
     options: ["L'afficher sur un écran", "Utiliser des convolutions 2D puissantes (Inception blocks) sur les périodes dominantes", "Gagner de la place mémoire", "Faire du GAN"],
     correct: 1,
     expl: "Elle analyse les variabilités intra-période et inter-période simultanément."
   },
   {
-    id: 71, type: 'mcq', diff: 'hard',
+    id: 71, type: 'mcq', diff: 'hard', isBonus: true,
     q: "TSMixer a prouvé que :",
     options: ["Les Transformers sont indispensables", "De simples MLPs bien régularisés peuvent battre les Transformers complexes", "Les RNN sont le futur", "Le Deep Learning est inutile"],
     correct: 1,
     expl: "Architecture 100% MLP (Multi-Layer Perceptron) qui atteint des performances SOTA avec moins de calcul."
   },
   {
-    id: 72, type: 'mcq', diff: 'medium',
+    id: 72, type: 'mcq', diff: 'medium', isBonus: true,
     q: "Quelle Loss Function utiliser pour prédire un intervalle de confiance (ex: 90%) ?",
     options: ["MSE", "Cross-Entropy", "Quantile Loss (Pinball Loss)", "L1 Loss"],
     correct: 2,
     expl: "La Quantile Loss pénalise asymétriquement les erreurs pour forcer le modèle à prédire un percentile donné (ex: q=0.9)."
   },
   {
-    id: 73, type: 'mcq', diff: 'hard',
+    id: 73, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Quand utiliser la Cross-Attention dans un Transformer temporel ?",
     options: ["Toujours", "Pour intégrer des variables exogènes (météo, prix) ou statiques dans le décodeur", "Pour faire de la classification", "Jamais, Self-Attention suffit"],
     correct: 1,
     expl: "Le décodeur utilise la sortie de l'encodeur (ou des variables externes) comme 'Keys' et 'Values' via la Cross-Attention."
   },
   {
-    id: 74, type: 'mcq', diff: 'medium',
+    id: 74, type: 'mcq', diff: 'medium', isBonus: true,
     q: "Différence entre 'Point Forecast' et 'Probabilistic Forecast' ?",
     options: ["Aucune", "Point = une seule valeur; Probabilistic = une distribution ou intervalle", "Point = futur proche; Probabilistic = futur lointain", "Point = facile; Probabilistic = difficile"],
     correct: 1,
     expl: "La prévision probabiliste est essentielle pour la gestion des risques (stocks, finance)."
   },
   {
-    id: 75, type: 'mcq', diff: 'hard',
+    id: 75, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Le concept de 'Lookback Window' désigne :",
     options: ["Regarder derrière soi", "La fenêtre d'historique utilisée en entrée du modèle", "La fenêtre de prédiction future", "Le temps d'entraînement"],
     correct: 1,
     expl: "C'est la taille de la séquence d'entrée $L$. Un ratio typique par rapport à l'horizon $H$ est souvent $L \\approx 1.5H$ à $4H$."
   },
   {
-    id: 76, type: 'mcq', diff: 'expert',
+    id: 76, type: 'mcq', diff: 'expert', isBonus: true,
     q: "Dans un modèle 'Decoder-only' (type GPT) pour séries temporelles :",
     options: ["On ne peut pas faire de prévision", "Le masque d'attention est triangulaire (Causal)", "On voit le futur pendant l'entraînement", "On utilise des convolutions"],
     correct: 1,
     expl: "Le masque causal empêche le modèle de voir les tokens futurs. Idéal pour la génération (Forecasting génératif)."
   },
   {
-    id: 77, type: 'mcq', diff: 'medium',
+    id: 77, type: 'mcq', diff: 'medium', isBonus: true,
     q: "Pourquoi normaliser chaque fenêtre (Instance Norm) indépendamment est risqué ?",
     options: ["Ça efface l'amplitude relative (Scale information)", "C'est trop lent", "Ça fait planter Python", "C'est inutile"],
     correct: 0,
     expl: "Si on supprime la moyenne/variance de la fenêtre, on perd l'info de niveau global. RevIN réinjecte cette info à la fin."
   },
   {
-    id: 78, type: 'mcq', diff: 'hard',
+    id: 78, type: 'mcq', diff: 'hard', isBonus: true,
     q: "Qu'est-ce que le 'Teacher Forcing' ?",
     options: ["Un prof méchant", "Utiliser la vérité terrain $y_{t-1}$ comme entrée au lieu de la prédiction $\\hat{y}_{t-1}$ pendant l'entraînement", "Forcer le modèle à apprendre vite", "Une régularisation"],
     correct: 1,
     expl: "Stabilisation de l'entraînement des RNN/Seq2Seq."
   },
   {
-    id: 79, type: 'mcq', diff: 'expert',
+    id: 79, type: 'mcq', diff: 'expert', isBonus: true,
     q: "Quelle métrique favorise la parcimonie (Sparsity) ?",
     options: ["L2 (Ridge)", "L1 (Lasso)", "Dropout", "Adam"],
     correct: 1,

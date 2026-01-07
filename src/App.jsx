@@ -6,6 +6,7 @@ import {
   Thermometer, Anchor, Network
 } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
+import { database, flashcards, slideSummaries } from './data';
 
 // --- GESTION DU LATEX (KATEX) ---
 const useKatex = () => {
@@ -422,6 +423,11 @@ export default function RevisionUltimate() {
               ) : (
                 <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-xs font-bold px-2 py-1 rounded">
                    <MessageSquare size={12} /> Réponse Libre
+                </span>
+              )}
+              {currentQ.isBonus && (
+                <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 text-xs font-bold px-2 py-1 rounded">
+                   ✨ Culture G
                 </span>
               )}
             </div>
